@@ -1,6 +1,6 @@
 # AirBnB clone - MySQL
 
-> This directory contains all the tasks of the project "0x02. AirBnB clone - MySQL" at [Holberton School](https://www.holbertonschool.com "Holberton School.")
+> This directory contains all the tasks of the project "0x02. AirBnB clone - MySQL" at [ALX](https://www.alxafrica.com/ "ALX.")
 
 
 
