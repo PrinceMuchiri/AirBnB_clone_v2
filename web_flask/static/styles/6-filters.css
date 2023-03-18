@@ -46,56 +46,57 @@ button:hover {
     width: 25%;
     border-right: 1px solid #DDDDDD;
 }
-
-ul {
-	padding-left: 0px;
-}
-
-li {
-	padding-left: 0%;
-}
-
-.amenities ul {
-	margin-top: 5px;
-	margin-bottom: 5px;
-}
-
-.locations .list_content {
-	padding-left: 60px;
-	padding-top: 10px;
-}
-
-.amenities .list_content {
-	padding-left: 30px;
-}
-
 .amenities {
     height: 100%;
     width: 25%;
 }
+
 .popover {
     visibility: hidden;
     width: 100%;
-	height: 300px;
-    max-height: 300px;
-	border: 1px solid #DDDDDD;
+    border: 1px solid #DDDDDD;
     border-radius: 4px;
     background: #FAFAFA;
-    padding-bottom: 25px;
-	overflow-y: scroll;
+    padding-bottom: 15px;
+    height: 300px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    max-height: 300px;
 }
+
+.popover::-webkit-scrollbar{
+    width: 0px;
+}
+
 .amenities .popover {
-    padding: 20px 0;
+    padding: 10px 0;
     margin-left: -5px;
     margin-top: 0%;
 }
+
+.amenities .popover ul{
+    margin: 0px;
+}
+
 .locations .popover {
-	padding: 20px 0;
     margin-top: 0%;
 }
 .popover ul {
     list-style-type: none;
+    padding-bottom: 10px;
+    padding-left: 10px;
 }
+.popover ul li{
+    padding: 4px;
+    padding-left: 10px;
+}
+
+.popover ul h2{
+    margin-top: 1.5%;
+    margin-bottom: 5%;
+    margin-left: 0px;
+}
+
 .amenities:hover .popover,
 .locations:hover .popover {
     visibility: visible;

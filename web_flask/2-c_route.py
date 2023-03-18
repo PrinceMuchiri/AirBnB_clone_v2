@@ -1,31 +1,26 @@
 #!/usr/bin/python3
-"""Start web application with two routings
-"""
-
+""" Starts a Flash Web Application C is FUN"""
 from flask import Flask
 app = Flask(__name__)
 
 
-@app.route('/')
-def hello():
-    """Return string when route queried
-    """
+@app.route('/', strict_slashes=False)
+def hello_hbnb():
+    """ Prints a Message when / is called """
     return 'Hello HBNB!'
 
 
-@app.route('/hbnb')
+@app.route('/hbnb', strict_slashes=False)
 def hbnb():
-    """Return string when route queried
-    """
+    """ Prints a Message when /hbnb is called """
     return 'HBNB'
 
 
-@app.route('/c/<text>')
+@app.route('/c/<text>', strict_slashes=False)
 def c_is_fun(text):
-    """Return reformatted text
-    """
-    return 'C ' + text.replace('_', ' ')
+    """ Prints a Message when /c is called """
+    return "C " + text.replace('_', ' ')
 
-if __name__ == '__main__':
-    app.url_map.strict_slashes = False
+if __name__ == "__main__":
+    """ Main Function """
     app.run(host='0.0.0.0', port=5000)

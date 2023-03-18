@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="stylesheet" type="text/css" href="static/styles/4-common.css">
-    <link rel="stylesheet" type="text/css" href="static/styles/3-header.css">
-    <link rel="stylesheet" type="text/css" href="static/styles/3-footer.css">
-    <link rel="stylesheet" type="text/css" href="static/styles/6-filters.css">
-    <link type="text/css" rel="stylesheet" href="static/styles/8-places.css">
-    <link rel="icon" href="static/images/icon.png" />
-    <title>HBNB</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../static/styles/4-common.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/3-header.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/3-footer.css">
+    <link rel="stylesheet" type="text/css" href="../static/styles/6-filters.css">
+    <link type="text/css" rel="stylesheet" href="../static/styles/8-places.css">
+    <link rel="icon" href="../static/images/icon.png" />
+    <title>HBnB</title>
   </head>
   <body>
     <header>
@@ -19,53 +20,56 @@
 	  <h3>States</h3>
 	  <h4>&nbsp;</h4>
 	  <div class="popover">
-	  {% for state in states.values()|sort(attribute='name') %}
 	    <ul>
+	      {% for state in states %}
 	      <li>
-		  <h2>{{ state.name }}</h2>
-          {% for city in state.cities|sort(attribute='name') %}
-		    <ul>
-		    <li><div class="list_content">{{ city.name }}</div></li>
-		    </ul>
-          {% endfor %}
+		<h2>{{ state[0].name }}:</h2>
+		<ul>
+		  {% for city in state[1] %}
+		  <li>{{ city.name }}</li>
+		  {% endfor %}
+		</ul>
 	      </li>
-        </ul>
-      {% endfor %}
+	      {% endfor %}
+	    </ul>
 	  </div>
 	</div>
 	<div class="amenities">
 	  <h3>Amenities</h3>
 	  <h4>&nbsp;</h4>
 	  <div class="popover">
-      {% for amenity in amenities.values()|sort(attribute='name') %}
 	    <ul>
-	      <li><div class="list_content">{{ amenity.name }}</div></li>
+	      {% for amenity in amenities %}
+	      <li>{{ amenity.name }}</li>
+	      {% endfor %}
 	    </ul>
-      {% endfor %} 
 	  </div>
 	</div>
 	<button type="button">Search</button>
       </section>
-   <section class="places">
-	<h1>Places</h1>
-	{% for place in places.values()|sort(attribute='name') %}
+      <div class="placesh1"><h1>Places</h1></div>
+      <section class="places">
+	<!-- <h1>Places</h1> -->
+	{% for place in places %}
 	<article>
 	  <div class="title_box">
 	    <h2>{{ place.name }}</h2>
 	    <div class="price_by_night">${{ place.price_by_night }}</div>
 	  </div>
 	  <div class="information">
-	    	<div class="max_guest">{{ place.max_guest }} Guest</div>
-            <div class="number_rooms">{{ place.number_rooms }} Room</div>
-            <div class="number_bathrooms">{{ place.number_bathrooms }} Bathroom</div>
+	    <div class="max_guest">{{ place.max_guest }} Guest{% if place.max_guest != 1 %}s{% endif %}</div>
+            <div class="number_rooms">{{ place.number_rooms }} Bedroom{% if place.number_rooms != 1 %}s{% endif %}</div>
+            <div class="number_bathrooms">{{ place.number_bathrooms }} Bathroom{% if place.number_bathrooms != 1 %}s{% endif %}</div>
 	  </div>
-	  <div class="user"><b>Owner:</b> {{ place.user.first_name }} {{ place.user.last_name }}</div>
-        {% autoescape false %}  
-		<div class="description">{{ place.description }}</div>
-		{% endautoescape %}
+	  <div class="user">
+            <b>Owner:</b> {{ place.user.first_name }} {{ place.user.last_name }}
+          </div>
+          <div class="description">
+	    {{ place.description | safe }}
+          </div>
 	</article>
-	{% endfor %}    
-  </section>
+	{% endfor %}
+      </section>
     </div>
     <footer>
       <p>Holberton School</p>
