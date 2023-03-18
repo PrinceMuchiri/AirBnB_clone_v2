@@ -1,36 +1,40 @@
 #!/usr/bin/python3
-""" This script starts a Flask web application """
-from flask import Flask, escape
+"""Start web application with two routings
+"""
+
+from flask import Flask
 app = Flask(__name__)
 
 
-@app.route('/', strict_slashes=False)
-def root():
-    """ Returns Hello HBNB """
-    return "Hello HBNB!"
+@app.route('/')
+def hello():
+    """Return string when route queried
+    """
+    return 'Hello HBNB!'
 
 
-@app.route('/hbnb', strict_slashes=False)
+@app.route('/hbnb')
 def hbnb():
-    """ Returns HBNB """
-    return "HBNB"
-
-
-@app.route('/c/<path:text>', strict_slashes=False)
-def c(text):
-    """ Returns C with text passed to the URL """
-    return "C {}".format(escape(text).replace('_', ' '))
-
-
-@app.route('/python', defaults={'text': 'is cool'}, strict_slashes=False)
-@app.route('/python/<path:text>', strict_slashes=False)
-def python(text):
+    """Return string when route queried
     """
-    Returns Python with text passed to URL
-    Defaults text to "is cool" if no text is passed to URL
+    return 'HBNB'
+
+
+@app.route('/c/<text>')
+def c_is_fun(text):
+    """Return reformatted text
     """
-    return "Python {}".format(escape(text).replace('_', ' '))
+    return 'C ' + text.replace('_', ' ')
+
+
+@app.route('/python/')
+@app.route('/python/<text>')
+def python_with_text(text='is cool'):
+    """Reformat text based on optional variable
+    """
+    return 'Python ' + text.replace('_', ' ')
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.url_map.strict_slashes = False
+    app.run(host='0.0.0.0', port=5000)

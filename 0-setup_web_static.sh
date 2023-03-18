@@ -1,39 +1,22 @@
 #!/usr/bin/env bash
-# Script to prepare a web server for web static project
+# Set up server file system for deployment
 
-## Update server
-apt update
-apt -y upgrade
+# install nginx
+sudo apt-get -y update
+sudo apt-get -y install nginx
+sudo service nginx start
 
-## Install NGINX
-apt -y install nginx
+# configure file system
+sudo mkdir -p /data/web_static/shared/
+sudo mkdir -p /data/web_static/releases/test/
+echo "Holberton School" | sudo tee /data/web_static/releases/test/index.html > /dev/null
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-## Creates directories
-mkdir -p /data/web_static/shared /data/web_static/releases/test
+# set permissions
+sudo chown -R ubuntu:ubuntu /data/
 
-## Write Hello World in index with tee command
-echo "Hello World" | tee /data/web_static/releases/test/index.html
+# configure nginx
+sudo sed -i '44i \\n\tlocation /hbnb_static {\n\t\talias /data/web_static/current/;\n\t}' /etc/nginx/sites-available/default
 
-## Create Symbolic link
-ln -sf /data/web_static/releases/test/ /data/web_static/current
-
-## Change owner and group like ubuntu
-chown -R ubuntu:ubuntu /data
-
-## Add static location to nginx settings:
-
-printf %s "server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
-        add_header X-Served-By $HOSTNAME;
-        root /var/www/html;
-        index index.html;
-
-        location /hbnb_static {
-            alias /data/web_static/current;
-            index index.html index.htm;
-        }
-}" > /etc/nginx/sites-available/default
-
-## Restart NGINX
-service nginx restart
+# restart web server
+sudo service nginx restart
