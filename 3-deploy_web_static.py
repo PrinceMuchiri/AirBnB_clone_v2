@@ -1,56 +1,86 @@
 #!/usr/bin/python3
-# -*- coding: utf-8 -*-
 """
-Created on Mon Aug 13 14:21:54 2020
-@author: Robinson Montes
+Module which contains a Fabric script
+(based on the file 2-do_deploy_web_static.py)
+that creates and distributes an archive to your web servers, using the
+function deploy:
+- Prototype: def deploy():
+- The script should take the following steps:
+    - Call the do_pack() function and store the path of the created archive
+    - Return False if no archive has been created
+    - Call the do_deploy(archive_path) function,
+       using the new path of the new archive
+    - Return the return value of do_deploy
 """
-from fabric.api import local, put, run, env
-from datetime import datetime
 
+
+from fabric.api import local, env, put, run
+from datetime import datetime
+import shlex
+import os
+env.hosts = ['3.236.55.133', '44.192.95.89']
 env.user = 'ubuntu'
-env.hosts = ['35.227.35.75', '100.24.37.33']
 
 
 def do_pack():
     """
-    Targging project directory into a packages as .tgz
+    Function:
+        do_pack function.
     """
-    now = datetime.now().strftime("%Y%m%d%H%M%S")
-    local('sudo mkdir -p ./versions')
-    path = './versions/web_static_{}'.format(now)
-    local('sudo tar -czvf {}.tgz web_static'.format(path))
-    name = '{}.tgz'.format(path)
-    if name:
-        return name
-    else:
+    try:
+        if not os.path.exists("versions"):
+            local('mkdir versions')
+        t = datetime.now()
+        f = "%Y%m%d%H%M%S"
+        archive_path = 'versions/web_static_{}.tgz'.format(t.strftime(f))
+        local('tar -cvzf {} web_static'.format(archive_path))
+        return archive_path
+    except BaseException:
         return None
 
 
 def do_deploy(archive_path):
-    """Deploy the boxing package tgz file
     """
+    Function:
+        Distributes an archive to your web servers,
+        using the function do_deploy
+
+    Returns:
+        Returns False if the file at the path
+        archive_path doesn't exist.
+    """
+    if not os.path.exists(archive_path):
+        return False
     try:
-        archive = archive_path.split('/')[-1]
-        path = '/data/web_static/releases/' + archive.strip('.tgz')
-        current = '/data/web_static/current'
-        put(archive_path, '/tmp')
-        run('mkdir -p {}'.format(path))
-        run('tar -xzf /tmp/{} -C {}'.format(archive, path))
-        run('rm /tmp/{}'.format(archive))
-        run('mv {}/web_static/* {}'.format(path, path))
-        run('rm -rf {}/web_static'.format(path))
-        run('rm -rf {}'.format(current))
-        run('ln -s {} {}'.format(path, current))
-        print('New version deployed!')
+        pname = archive_path.replace('/', ' ')
+        pname = shlex.split(pname)
+        pname = pname[-1]
+
+        wname = pname.replace('.', ' ')
+        wname = shlex.split(wname)
+        wname = wname[0]
+
+        releases_path = "/data/web_static/releases/{}/".format(wname)
+        tmp_path = "/tmp/{}".format(pname)
+
+        put(archive_path, "/tmp/")
+        run("mkdir -p {}".format(releases_path))
+        run("tar -xzf {} -C {}".format(tmp_path, releases_path))
+        run("rm {}".format(tmp_path))
+        run("mv {}web_static/* {}".format(releases_path, releases_path))
+        run("rm -rf {}web_static".format(releases_path))
+        run("rm -rf /data/web_static/current")
+        run("ln -s {} /data/web_static/current".format(releases_path))
+        print("New version deployed!")
         return True
-    except:
+    except BaseException:
         return False
 
 
 def deploy():
-    """
-    A function to call do_pack and do_deploy
-    """
-    archive_path = do_pack()
-    answer = do_deploy(archive_path)
-    return answer
+    """Distributes an archive to the web servers"""
+    try:
+        archive_path = do_pack()
+        return do_deploy(archive_path)
+    except BaseException:
+        return False
