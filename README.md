@@ -71,7 +71,7 @@ Using a MySQL storage we replace the file storage (JSON file) by a Database stor
 ## AUTHORS
 
 **Princewill Kalu Orie**
-**partner's name**
+**Boniface Muchiri**
 
 * [Github @Pokkode](https://github.com/Pokkode)
-* [Github @partner's username](https://github.com/partner's username)
+* [Github @PrinceMuchiri](https://github.com/PrinceMuchiri)
